@@ -29,6 +29,7 @@
     "nodemon": "^3.0.1",
     "objection": "^3.1.1",
     "path": "^0.12.7",
+    "readme-md": "^0.13.1",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"

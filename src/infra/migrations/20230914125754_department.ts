@@ -8,7 +8,6 @@ export async function up(knex: Knex): Promise<void> {
         t.string('category_name')
         t.string('location')
         t.string('salary')
-        t.integer('employee_id')
     })
 }
 

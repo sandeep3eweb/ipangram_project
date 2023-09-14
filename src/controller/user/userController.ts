@@ -76,3 +76,14 @@ export const addDepartmentUsers = async (request: Request, response: Response, n
     }
 
 }
+
+export const searchUsers = async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        let queryParams = request.query
+        let users = await usecase.searchUsers(queryParams)
+        return response.json(users)
+    } catch (err) {
+        next(err)
+    }
+
+}

@@ -2,20 +2,18 @@ import mainKnexInstance from ".."
 import { UserRole } from "../../domain/Enums"
 import { IDepartmentEmployees } from "../../domain/IDepartmentEmployees"
 import { IUser } from "../../domain/IUser"
-import DepartmentEmployeesModel from "../Models/DepartmentEmployeesModel"
 import UserModel from "../Models/UserModel"
 import { getBaseRepository } from "./BaseRepository"
+import DepartmentModel from '../Models/DepartmentModel';
+import { raw } from "objection"
+import getPaginatedResult from "../../helper/getPaginatedResult"
 
 const getUserByUsername = () => async (username: string) => {
     return await UserModel.query(mainKnexInstance).findOne('email', username)
 }
 
-const getUsersByType = () => async (type: string) => {
-    return await UserModel.query(mainKnexInstance).where('role', type)
-}
-
-const addDepartmentUsers = () => async (empDe: IDepartmentEmployees[]) => {
-    return await DepartmentEmployeesModel.query(mainKnexInstance).insertGraphAndFetch(empDe)
+const getUsersByType = () => async (role: string) => {
+    return await UserModel.query(mainKnexInstance).where('role', role)
 }
 
 const getUserByIdAndRole = () => async (id: number, role: string) => {
@@ -34,6 +32,16 @@ const updateUsers = () => async (userIds: number[], userAttributes: IUser) => {
     return await UserModel.query(mainKnexInstance).update(userAttributes).whereIn('id', userIds)
 }
 
+const searchUsers = () => async (department: string, location?: string) => {
+    let subQuery = DepartmentModel.query(mainKnexInstance).select('id').where('departmentName', department)
+    if (location) {
+        subQuery = subQuery.where('location', 'like', `${location}%`)
+    }
+    let query = UserModel.query(mainKnexInstance).whereIn('departmentId', subQuery)
+    let result = await getPaginatedResult(query)
+    return result
+}
+
 export const getUserRepository = () => {
     const baseRepo = getBaseRepository<UserModel, IUser>(UserModel, 'user')
     return {
@@ -41,8 +49,8 @@ export const getUserRepository = () => {
         createUser: baseRepo.creatEntity,
         getUserByUsername: getUserByUsername(),
         updateUser: baseRepo.updateEntity,
-        addDepartmentUsers: addDepartmentUsers(),
         getUserByIdAndRole: getUserByIdAndRole(),
-        updateUsers: updateUsers()
+        updateUsers: updateUsers(),
+        searchUsers: searchUsers()
     }
 }

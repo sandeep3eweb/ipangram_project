@@ -1,5 +1,6 @@
 import { Model, raw } from "objection"
 import mainKnexInstance from ".."
+import getPaginatedResult from "../../helper/getPaginatedResult"
 
 export const get = <TModel extends Model, TDomain>(model: any, name: string) =>
     async (id: number): Promise<TDomain> => {
@@ -12,7 +13,8 @@ export const get = <TModel extends Model, TDomain>(model: any, name: string) =>
 
 const getAll = <TModel extends Model, TDomain>(model: any, name: string) => async (includes?: any, fields?: string[]): Promise<TDomain[]> => {
     let query = model.query(mainKnexInstance).from(name)
-    return await query
+    const entities: any = await getPaginatedResult(query)
+    return entities
 }
 
 const createEntity = <TModel extends Model, TDomain>(model: any, name: string) =>

@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 const HOST = process.env.DB_HOST || '127.0.0.1'
-const NAME = process.env.DB_NAME || 'test_project'
+const NAME = process.env.DB_NAME || 'ipangram'
 const USERNAME = process.env.DB_USERNAME || 'root'
 const PASSWORD = process.env.DB_PASSWORD || 'root_1234'
 const PORT = Number((process.env.DB_PORT || '3306'))

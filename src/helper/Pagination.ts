@@ -29,10 +29,8 @@ const setPagination = (nameSpace: any, queryParams: any) => {
   if (filter) {
     let filter = {
       filter: true,
-      name: queryParams.name,
-      email: queryParams.email,
-      groupId: queryParams.groupId,
-      fullname: queryParams.fullname
+      department: queryParams.department,
+      location: queryParams.location
     }
     nameSpace.set('filter', filter)
   }

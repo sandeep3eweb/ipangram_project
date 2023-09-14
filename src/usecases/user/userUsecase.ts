@@ -7,9 +7,9 @@ interface IUserRepository {
     createUser(user: IUser): Promise<IUser>
     getUsersByType(type: string): Promise<IUser[]>
     updateUser(id: number, user: IUser): Promise<IUser>
-    addDepartmentUsers(empDep: IDepartmentEmployees[]): Promise<any>
     getUserByIdAndRole(id: number, type: string): Promise<IUser>
     updateUsers(userIds: number[], userAttributes: IUser): Promise<any>
+    searchUsers(department: string, location?: any): Promise<IUser[]>
 }
 
 const repo: IUserRepository = getUserRepository()
@@ -38,6 +38,13 @@ const getUserByIdAndRole = () => async (id: number, type: string) => {
     return await repo.getUserByIdAndRole(id, type)
 }
 
+const searchUsers = () => async (queryParams: any) => {
+    if (queryParams.location) {
+        return await repo.searchUsers(queryParams.department, queryParams.location)
+    }
+    return await repo.searchUsers(queryParams.department)
+}
+
 export const getUserUseCase = () => {
     return {
         createUser: createUser(),
@@ -45,6 +52,7 @@ export const getUserUseCase = () => {
         getUserByUsername: getUserByUsername(),
         updateUser: updateUser(),
         addDepartmentUsers: addDepartmentUsers(),
-        getUserByIdAndType: getUserByIdAndRole()
+        getUserByIdAndType: getUserByIdAndRole(),
+        searchUsers: searchUsers()
     }
 }
