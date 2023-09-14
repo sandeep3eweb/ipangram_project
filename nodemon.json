@@ -1,0 +1,18 @@
+{
+  "watch": [
+    "src"
+  ],
+  "ext": ".ts",
+  "ignore": [
+    "./src/downloads",
+    "./src/uploaded",
+    "./uploads",
+    "./downloads"
+  ],
+  "exec": "ts-node ./src/index.ts",
+  "events": {
+    "restart": "kill-port 5000",
+    "crash": "kill-port 5000"
+  },
+  "delay": "1500"
+}
